@@ -1,0 +1,35 @@
+{
+  "name": "@trueadmin/web-core",
+  "version": "0.1.0",
+  "description": "Framework-neutral web protocol utilities and types for TrueAdmin.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trueadmin-labs/trueadmin-web-core.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./crud": {
+      "types": "./src/crud/index.d.ts",
+      "default": "./src/crud/index.js"
+    },
+    "./plugin": {
+      "types": "./src/plugin/index.d.ts",
+      "default": "./src/plugin/index.js"
+    },
+    "./module": {
+      "types": "./src/module/index.d.ts",
+      "default": "./src/module/index.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
