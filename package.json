@@ -1,6 +1,6 @@
 {
   "name": "@trueadmin/web-core",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Framework-neutral web protocol utilities and types for TrueAdmin.",
   "license": "MIT",
   "repository": {
@@ -9,6 +9,7 @@
   },
   "type": "module",
   "scripts": {
+    "prepublishOnly": "npm test",
     "test": "node --test"
   },
   "exports": {
