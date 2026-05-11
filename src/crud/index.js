@@ -2,7 +2,7 @@ export const serializeCrudParams = (params = {}) => {
   const search = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {
-    if (value === undefined || value === null || value === '') {
+    if (isEmptyParamValue(value)) {
       continue;
     }
 
@@ -11,17 +11,25 @@ export const serializeCrudParams = (params = {}) => {
       continue;
     }
 
-    if (Array.isArray(value)) {
-      for (const item of value) {
-        search.append(key, String(item));
-      }
-      continue;
-    }
-
-    search.set(key, String(value));
+    appendParamValue(search, key, value);
   }
 
   return search;
+};
+
+const isEmptyParamValue = (value) => value === undefined || value === null || value === '';
+
+const appendParamValue = (search, key, value) => {
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (!isEmptyParamValue(item)) {
+        search.append(`${key}[]`, String(item));
+      }
+    }
+    return;
+  }
+
+  search.set(key, String(value));
 };
 
 const appendNestedParams = (search, prefix, value) => {
@@ -30,18 +38,10 @@ const appendNestedParams = (search, prefix, value) => {
   }
 
   for (const [key, nestedValue] of Object.entries(value)) {
-    if (nestedValue === undefined || nestedValue === null || nestedValue === '') {
+    if (isEmptyParamValue(nestedValue)) {
       continue;
     }
 
-    const param = `${prefix}[${key}]`;
-    if (Array.isArray(nestedValue)) {
-      for (const item of nestedValue) {
-        search.append(param, String(item));
-      }
-      continue;
-    }
-
-    search.set(param, String(nestedValue));
+    appendParamValue(search, `${prefix}[${key}]`, nestedValue);
   }
 };
