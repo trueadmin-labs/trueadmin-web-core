@@ -8,6 +8,9 @@
     "url": "git+https://github.com/trueadmin-labs/trueadmin-web-core.git"
   },
   "type": "module",
+  "scripts": {
+    "test": "node test/crud.test.mjs"
+  },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
@@ -27,7 +30,8 @@
     }
   },
   "files": [
-    "src"
+    "src",
+    "test"
   ],
   "publishConfig": {
     "access": "public"
