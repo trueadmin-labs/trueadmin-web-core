@@ -8,9 +8,11 @@ import {
   downloadFile,
   errorCenter,
   normalizeError,
+  crudRequestOptions,
   resolveTrans,
   serializeCrudParams,
   stringifyRawSearchParams,
+  toCrudRequestParams,
   trans,
 } from '../src/index.js';
 import { downloadFile as downloadFileEntry } from '../src/download/index.js';
@@ -28,12 +30,20 @@ test('package exposes protocol subpaths', () => {
 
 test('root entry exports core helpers', () => {
   assert.equal(typeof serializeCrudParams, 'function');
+  assert.equal(typeof toCrudRequestParams, 'function');
+  assert.equal(typeof crudRequestOptions, 'function');
   assert.equal(defineModule, defineModuleEntry);
   assert.equal(definePluginConfig, definePluginConfigEntry);
   assert.equal(downloadFile, downloadFileEntry);
   assert.equal(errorCenter, errorCenterEntry);
   assert.equal(trans, transEntry);
   assert.equal(stringifyRawSearchParams, stringifyRawSearchParamsEntry);
+});
+
+test('crud request helpers serialize query options', () => {
+  assert.equal(toCrudRequestParams({ page: 2, filter: { name: 'admin' } }), 'page=2&filter%5Bname%5D=admin');
+  assert.deepEqual(crudRequestOptions({ page: 2 }), { params: 'page=2' });
+  assert.equal(crudRequestOptions(), undefined);
 });
 
 test('module and plugin helpers preserve manifest identity', () => {

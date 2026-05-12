@@ -19,4 +19,16 @@ export type CrudListParams = {
   [key: string]: unknown;
 };
 
+export type CrudRequestQueryParams = CrudListParams | Record<string, unknown>;
+
+export type CrudRequestOptions = {
+  params: string;
+};
+
 export declare const serializeCrudParams: (params?: CrudListParams) => URLSearchParams;
+
+export declare const toCrudRequestParams: (params?: CrudRequestQueryParams) => string;
+
+export declare const crudRequestOptions: (
+  params?: CrudRequestQueryParams,
+) => CrudRequestOptions | undefined;

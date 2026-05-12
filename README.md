@@ -18,7 +18,7 @@ Endpoint-specific runtime config still belongs to each application; this package
 
 ## CRUD Query Protocol
 
-`@trueadmin/web-core/crud` exports the shared list-query types and `serializeCrudParams`.
+`@trueadmin/web-core/crud` exports the shared list-query types, `serializeCrudParams`, `toCrudRequestParams`, and `crudRequestOptions`.
 
 ```js
 import { serializeCrudParams } from '@trueadmin/web-core/crud';

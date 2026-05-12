@@ -17,6 +17,13 @@ export const serializeCrudParams = (params = {}) => {
   return search;
 };
 
+export const toCrudRequestParams = (params) => serializeCrudParams(params).toString();
+
+export const crudRequestOptions = (params) => {
+  const query = toCrudRequestParams(params);
+  return query ? { params: query } : undefined;
+};
+
 const isEmptyParamValue = (value) => value === undefined || value === null || value === '';
 
 const appendParamValue = (search, key, value) => {
