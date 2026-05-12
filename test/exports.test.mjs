@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import {
   ApiError,
@@ -18,6 +19,12 @@ import { trans as transEntry } from '../src/i18n/index.js';
 import { defineModule as defineModuleEntry } from '../src/module/index.js';
 import { definePluginConfig as definePluginConfigEntry } from '../src/plugin/index.js';
 import { stringifyRawSearchParams as stringifyRawSearchParamsEntry } from '../src/url/index.js';
+
+test('package exposes protocol subpaths', () => {
+  const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  assert.equal(packageJson.exports['./http'].types, './src/http/index.d.ts');
+  assert.equal(packageJson.exports['./http'].default, './src/http/index.js');
+});
 
 test('root entry exports core helpers', () => {
   assert.equal(typeof serializeCrudParams, 'function');

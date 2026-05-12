@@ -10,6 +10,7 @@ Endpoint-specific runtime config still belongs to each application; this package
 - `@trueadmin/web-core/crud`
 - `@trueadmin/web-core/download`
 - `@trueadmin/web-core/error`
+- `@trueadmin/web-core/http`
 - `@trueadmin/web-core/i18n`
 - `@trueadmin/web-core/plugin`
 - `@trueadmin/web-core/module`

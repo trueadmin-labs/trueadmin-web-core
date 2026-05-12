@@ -1,6 +1,6 @@
 {
   "name": "@trueadmin/web-core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Framework-neutral web protocol utilities and types for TrueAdmin.",
   "license": "MIT",
   "repository": {
@@ -40,6 +40,10 @@
     "./i18n": {
       "types": "./src/i18n/index.d.ts",
       "default": "./src/i18n/index.js"
+    },
+    "./http": {
+      "types": "./src/http/index.d.ts",
+      "default": "./src/http/index.js"
     },
     "./url": {
       "types": "./src/url/index.d.ts",

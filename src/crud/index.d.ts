@@ -1,3 +1,5 @@
+export type { PageResult } from '../http/index.js';
+
 export type CrudOrder = 'asc' | 'desc';
 
 export type CrudOperator = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'like' | 'in' | 'between';
@@ -15,13 +17,6 @@ export type CrudListParams = {
   filter?: Record<string, CrudFilterValue | undefined>;
   op?: Record<string, CrudOperator | undefined>;
   [key: string]: unknown;
-};
-
-export type PageResult<TItem> = {
-  items: TItem[];
-  total: number;
-  page: number;
-  pageSize: number;
 };
 
 export declare const serializeCrudParams: (params?: CrudListParams) => URLSearchParams;
