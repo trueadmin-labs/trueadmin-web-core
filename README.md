@@ -4,6 +4,7 @@ Framework-neutral web protocol utilities and types for TrueAdmin.
 
 This package provides stable web framework helpers and protocol types for TrueAdmin.
 Endpoint-specific runtime config still belongs to each application; this package only carries reusable framework behavior.
+It has no React, Ant Design, or Vite dependency.
 
 ## Exports
 

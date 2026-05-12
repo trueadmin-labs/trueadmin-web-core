@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { RenderableTrans, TranslateFunction } from '../i18n/index.js';
 
 export declare class ApiError extends Error {
@@ -17,14 +16,14 @@ export type ErrorRenderContext = {
   traceId?: string;
 };
 
-export type ErrorRenderable = RenderableTrans<ErrorRenderContext>;
+export type ErrorRenderable<TRender = unknown> = RenderableTrans<ErrorRenderContext, TRender>;
 
-export type ErrorExplanation = {
-  title?: ErrorRenderable;
-  description?: ErrorRenderable;
-  causes?: ErrorRenderable[];
-  suggestions?: ErrorRenderable[];
-  extra?: (context: ErrorRenderContext) => ReactNode;
+export type ErrorExplanation<TRender = unknown> = {
+  title?: ErrorRenderable<TRender>;
+  description?: ErrorRenderable<TRender>;
+  causes?: ErrorRenderable<TRender>[];
+  suggestions?: ErrorRenderable<TRender>[];
+  extra?: (context: ErrorRenderContext) => TRender;
   severity?: ErrorSeverity;
   docUrl?: string;
 };
@@ -36,7 +35,7 @@ export type ErrorPolicy = {
   field?: string;
 };
 
-export type ErrorRegistry = Record<string, ErrorExplanation>;
+export type ErrorRegistry<TRender = unknown> = Record<string, ErrorExplanation<TRender>>;
 
 export type ErrorEvent = {
   error: ApiError;

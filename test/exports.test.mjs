@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import test from 'node:test';
 import {
   ApiError,
@@ -22,10 +22,34 @@ import { defineModule as defineModuleEntry } from '../src/module/index.js';
 import { definePluginConfig as definePluginConfigEntry } from '../src/plugin/index.js';
 import { stringifyRawSearchParams as stringifyRawSearchParamsEntry } from '../src/url/index.js';
 
+const sourceFiles = (directoryUrl) =>
+  readdirSync(directoryUrl, { withFileTypes: true }).flatMap((entry) => {
+    const entryUrl = new URL(`${entry.name}${entry.isDirectory() ? '/' : ''}`, directoryUrl);
+    if (entry.isDirectory()) {
+      return sourceFiles(entryUrl);
+    }
+    return statSync(entryUrl).isFile() ? [entryUrl] : [];
+  });
+
 test('package exposes protocol subpaths', () => {
   const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   assert.equal(packageJson.exports['./http'].types, './src/http/index.d.ts');
   assert.equal(packageJson.exports['./http'].default, './src/http/index.js');
+});
+
+test('package source stays framework neutral', () => {
+  const forbiddenPatterns = [
+    /\bfrom ['"]react['"]/,
+    /\bfrom ['"]antd['"]/,
+    /\bfrom ['"]@ant-design\//,
+    /\bReactNode\b/,
+  ];
+  for (const fileUrl of sourceFiles(new URL('../src/', import.meta.url))) {
+    const source = readFileSync(fileUrl, 'utf8');
+    for (const pattern of forbiddenPatterns) {
+      assert.doesNotMatch(source, pattern, fileUrl.pathname);
+    }
+  }
 });
 
 test('root entry exports core helpers', () => {
@@ -41,7 +65,10 @@ test('root entry exports core helpers', () => {
 });
 
 test('crud request helpers serialize query options', () => {
-  assert.equal(toCrudRequestParams({ page: 2, filter: { name: 'admin' } }), 'page=2&filter%5Bname%5D=admin');
+  assert.equal(
+    toCrudRequestParams({ page: 2, filter: { name: 'admin' } }),
+    'page=2&filter%5Bname%5D=admin',
+  );
   assert.deepEqual(crudRequestOptions({ page: 2 }), { params: 'page=2' });
   assert.equal(crudRequestOptions(), undefined);
 });

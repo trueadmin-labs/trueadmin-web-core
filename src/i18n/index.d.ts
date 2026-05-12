@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 export type TransText = {
   readonly __trans: true;
   readonly key: string;
@@ -18,11 +16,14 @@ export declare const resolveTrans: (
   fallback?: string,
 ) => string;
 
-export type RenderableTrans<TContext> = string | TransText | ((context: TContext) => ReactNode);
+export type RenderableTrans<TContext, TRender = unknown> =
+  | string
+  | TransText
+  | ((context: TContext) => TRender);
 
-export declare const resolveRenderableTrans: <TContext>(
-  value: RenderableTrans<TContext> | undefined,
+export declare const resolveRenderableTrans: <TContext, TRender = unknown>(
+  value: RenderableTrans<TContext, TRender> | undefined,
   context: TContext,
   translate: TranslateFunction,
   fallback?: string,
-) => ReactNode;
+) => string | TRender;
