@@ -1,8 +1,7 @@
 export type ApiEnvelope<T> = {
-  code: string | number;
+  code: string;
   message: string;
   data: T;
-  success?: boolean;
 };
 
 export type PageResult<TItem, TMeta = Record<string, unknown>> = {
