@@ -2,13 +2,18 @@
 
 Framework-neutral web protocol utilities and types for TrueAdmin.
 
-This package intentionally starts small. It reserves the public npm package and provides stable protocol helpers that do not depend on React, Ant Design, Vite, or a specific application runtime.
+This package provides stable web framework helpers and protocol types for TrueAdmin.
+Endpoint-specific runtime config still belongs to each application; this package only carries reusable framework behavior.
 
 ## Exports
 
 - `@trueadmin/web-core/crud`
+- `@trueadmin/web-core/download`
+- `@trueadmin/web-core/error`
+- `@trueadmin/web-core/i18n`
 - `@trueadmin/web-core/plugin`
 - `@trueadmin/web-core/module`
+- `@trueadmin/web-core/url`
 
 ## CRUD Query Protocol
 
