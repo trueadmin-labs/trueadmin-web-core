@@ -8,60 +8,73 @@ test('serializes empty crud params', () => {
   assert.deepEqual(entries(), []);
 });
 
-test('serializes pagination, keyword, and sort params', () => {
+test('serializes pagination, keyword, and multi-sort params', () => {
   assert.deepEqual(
     entries({
       page: 1,
       pageSize: 20,
       keyword: 'admin',
-      sort: 'created_at',
-      order: 'desc',
+      sorts: [
+        { field: 'created_at', order: 'desc', nulls: 'last' },
+        { field: 'id', order: 'asc' },
+      ],
     }),
     [
       ['page', '1'],
       ['pageSize', '20'],
       ['keyword', 'admin'],
-      ['sort', 'created_at'],
-      ['order', 'desc'],
+      ['sorts[0][field]', 'created_at'],
+      ['sorts[0][order]', 'desc'],
+      ['sorts[0][nulls]', 'last'],
+      ['sorts[1][field]', 'id'],
+      ['sorts[1][order]', 'asc'],
     ],
   );
 });
 
-test('serializes filter and operator params', () => {
+test('serializes filter condition params', () => {
   assert.deepEqual(
     entries({
-      filter: {
-        status: 'enabled',
-        id: [1, 2],
-        empty: '',
-        nil: null,
-      },
-      op: {
-        status: '=',
-        id: 'in',
-        empty: undefined,
-      },
+      filters: [
+        { field: 'status', op: 'eq', value: 'enabled' },
+        { field: 'id', op: 'in', value: [1, 2] },
+        { field: 'archived_at', op: 'is_null' },
+        { field: '', op: 'eq', value: 'ignored' },
+      ],
     }),
     [
-      ['filter[status]', 'enabled'],
-      ['filter[id][]', '1'],
-      ['filter[id][]', '2'],
-      ['op[status]', '='],
-      ['op[id]', 'in'],
+      ['filters[0][field]', 'status'],
+      ['filters[0][op]', 'eq'],
+      ['filters[0][value]', 'enabled'],
+      ['filters[1][field]', 'id'],
+      ['filters[1][op]', 'in'],
+      ['filters[1][value][]', '1'],
+      ['filters[1][value][]', '2'],
+      ['filters[2][field]', 'archived_at'],
+      ['filters[2][op]', 'is_null'],
     ],
   );
 });
 
-test('serializes booleans and skips empty array items', () => {
+test('serializes namespaced params and skips empty array items', () => {
   assert.deepEqual(
     entries({
-      enabled: true,
-      ids: [1, undefined, 2, null, ''],
+      params: {
+        enabled: true,
+        ids: [1, undefined, 2, null, ''],
+      },
     }),
     [
-      ['enabled', 'true'],
-      ['ids[]', '1'],
-      ['ids[]', '2'],
+      ['params[enabled]', 'true'],
+      ['params[ids][]', '1'],
+      ['params[ids][]', '2'],
     ],
+  );
+});
+
+test('rejects legacy flat crud params', () => {
+  assert.throws(
+    () => serializeCrudParams({ filter: { name: 'admin' } }),
+    /Unsupported CRUD request param "filter"/,
   );
 });

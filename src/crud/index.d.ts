@@ -1,25 +1,44 @@
 export type { PageResult } from '../http/index.js';
 
-export type CrudOrder = 'asc' | 'desc';
+export type CrudSortOrder = 'asc' | 'desc';
 
-export type CrudOperator = '=' | '<>' | '>' | '>=' | '<' | '<=' | 'like' | 'in' | 'between';
+export type CrudOperator =
+  | 'eq'
+  | 'ne'
+  | 'gt'
+  | 'gte'
+  | 'lt'
+  | 'lte'
+  | 'like'
+  | 'in'
+  | 'between'
+  | 'is_null'
+  | 'not_null';
 
 export type CrudScalar = string | number | boolean;
 
 export type CrudFilterValue = CrudScalar | CrudScalar[];
 
+export type CrudFilterCondition = {
+  field: string;
+  op: CrudOperator;
+  value?: CrudFilterValue;
+};
+
+export type CrudSortRule = {
+  field: string;
+  order: CrudSortOrder;
+  nulls?: 'first' | 'last';
+};
+
 export type CrudListParams = {
   page?: number;
   pageSize?: number;
   keyword?: string;
-  sort?: string;
-  order?: CrudOrder;
-  filter?: Record<string, CrudFilterValue | undefined>;
-  op?: Record<string, CrudOperator | undefined>;
-  [key: string]: unknown;
+  filters?: CrudFilterCondition[];
+  sorts?: CrudSortRule[];
+  params?: Record<string, CrudFilterValue | undefined>;
 };
-
-export type CrudRequestQueryParams = CrudListParams | Record<string, unknown>;
 
 export type CrudRequestOptions = {
   params: string;
@@ -27,8 +46,8 @@ export type CrudRequestOptions = {
 
 export declare const serializeCrudParams: (params?: CrudListParams) => URLSearchParams;
 
-export declare const toCrudRequestParams: (params?: CrudRequestQueryParams) => string;
+export declare const toCrudRequestParams: (params?: CrudListParams) => string;
 
 export declare const crudRequestOptions: (
-  params?: CrudRequestQueryParams,
+  params?: CrudListParams,
 ) => CrudRequestOptions | undefined;
